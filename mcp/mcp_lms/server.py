@@ -14,6 +14,16 @@ from mcp.types import TextContent, Tool
 from pydantic import BaseModel, Field
 
 from mcp_lms.client import LMSClient
+from mcp_lms.observability import (
+    _LogsSearchQuery,
+    _LogsErrorCountQuery,
+    _TracesListQuery,
+    _TracesGetQuery,
+    logs_search,
+    logs_error_count,
+    traces_list,
+    traces_get,
+)
 
 _base_url: str = ""
 
@@ -183,6 +193,32 @@ _register(
     "Trigger the LMS sync pipeline. May take a moment.",
     _NoArgs,
     _sync_pipeline,
+)
+
+# Observability tools (VictoriaLogs and VictoriaTraces)
+_register(
+    "logs_search",
+    "Search logs in VictoriaLogs by query. Use for finding errors, debugging issues.",
+    _LogsSearchQuery,
+    logs_search,
+)
+_register(
+    "logs_error_count",
+    "Count errors in VictoriaLogs for a specific service over recent time.",
+    _LogsErrorCountQuery,
+    logs_error_count,
+)
+_register(
+    "traces_list",
+    "List recent traces for a service from VictoriaTraces.",
+    _TracesListQuery,
+    traces_list,
+)
+_register(
+    "traces_get",
+    "Fetch a specific trace by ID from VictoriaTraces to see span hierarchy.",
+    _TracesGetQuery,
+    traces_get,
 )
 
 
